@@ -1,0 +1,2 @@
+* Se ha corregido la compatibilidad de la importación con el Simple Calendar.
+* Se ha corregido la configuración de la variante FOSS.
