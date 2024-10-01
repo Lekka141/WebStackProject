@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { AuthContext } from './auth/AuthContext';
+import { Route, Navigate } from 'react-router-dom';
+import { AuthContext } from './components/auth/AuthContext';
 
 /**
  * ProtectedRoute component ensures that only authenticated users can access certain routes.
@@ -8,7 +8,7 @@ import { AuthContext } from './auth/AuthContext';
  * @param {object} props - The properties passed to the component.
  * @param {React.Component} props.component - The component to render if the user is authenticated.
  * @param {...object} rest - Any other properties passed to the route.
- * @returns {React.Component} - The route that either renders the component or redirects to the sign-in page.
+ * @returns {React.Component} - The route that either renders the component or Navigates to the sign-in page.
  */
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -20,7 +20,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
         isAuthenticated ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: '/signin', state: { from: props.location } }} />
+          <Navigate to={{ pathname: '/signin', state: { from: props.location } }} />
         )
       }
     />

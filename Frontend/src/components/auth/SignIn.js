@@ -2,14 +2,14 @@ import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
 import { AuthContext } from './AuthContext';
 import API from '../../utils/API'; /* Assuming an API utility for backend interaction */
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useContext(AuthContext); /* Use the login function from AuthContext */
-  const history = useHistory();
+  const history = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,9 +19,9 @@ function SignIn() {
       const response = await API.post('/login', { email, password });
 
       if (response.data.success) {
-        /* Set authentication state and redirect to the dashboard */
+        /* Set authentication state and Navigate to the dashboard */
         login({ id: response.data.user.id, email: response.data.user.email }); /* Use the login method */
-        history.push('/dashboard'); /* Redirect to the dashboard */
+        history.push('/dashboard'); /* Navigate to the dashboard */
       } else {
         /* Display error message */
         setError(response.data.message);

@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/auth/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -16,20 +16,27 @@ function App() {
     <AuthProvider>
       <Router>
         <Suspense fallback={<Loading />}>
-          <Switch>
+          <Routes>
             {/* Public Routes */}
-            <Route path="/signup" component={SignUp} />
-            <Route path="/signin" component={SignIn} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
 
             {/* Protected Route */}
-            <ProtectedRoute path="/dashboard" component={Dashboard} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
 
-            {/* Redirect to Dashboard for root URL */}
-            <Route exact path="/" render={() => <Dashboard />} />
+            {/* Navigate to Dashboard for root URL */}
+            <Route path="/" element={<Dashboard />} />
 
             {/* 404 Not Found Route */}
-            <Route path="*" render={() => <div>404 - Not Found</div>} />
-          </Switch>
+            <Route path="*" element={<div>404 - Not Found</div>} />
+          </Routes>
         </Suspense>
       </Router>
     </AuthProvider>
