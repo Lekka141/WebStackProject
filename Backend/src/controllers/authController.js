@@ -26,6 +26,16 @@ const signUpUser = async (req, res) => {
 
     await user.save();
 
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Set token as an HTTP-only cookie (for security)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
+      maxAge: 3600000, // 1 hour
+    });
+
     res.status(201).json({
       message: 'User registered successfully',
       user: {
@@ -57,12 +67,18 @@ const signInUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT
+    // Generate JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Set token as an HTTP-only cookie (for security)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
+      maxAge: 3600000, // 1 hour
+    });
 
     res.status(200).json({
       message: 'Login successful',
-      token,
       user: {
         id: user._id,
         name: user.name,
@@ -75,4 +91,9 @@ const signInUser = async (req, res) => {
   }
 };
 
-module.exports = { signInUser, signUpUser };
+// Controller to log out a user (clearing the JWT token cookie)
+const signOutUser = (req, res) => {
+  res.clearCookie('token').json({ message: 'Sign-out successful' });
+};
+
+module.exports = { signInUser, signUpUser, signOutUser };
