@@ -1,9 +1,16 @@
 const express = require('express');
 const connectDB = require('./config/db'); // Database connection function
+const cors = require('cors'); // Import the cors package
 require('dotenv').config(); // Load environment variables from .env
 
 // Initialize express app
 const app = express();
+
+// Enable CORS with options
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000', // Allow requests from frontend
+  credentials: true, // If using cookies for authentication
+}));
 
 // Connect to MongoDB
 connectDB().catch(err => {
@@ -16,6 +23,8 @@ app.use(express.json()); // This allows your API to accept and parse JSON data
 
 // Routes
 app.use('/api/users', require('./routes/userRoutes')); // User authentication routes
+app.use('/api/files', require('./routes/fileRoutes')); // File management routes
+app.use('/api/app', require('./routes/appRoutes')); // Application-level routes
 
 // Root route - simple message to indicate the API is running
 app.get('/', (req, res) => {
