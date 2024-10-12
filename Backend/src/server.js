@@ -26,6 +26,10 @@ app.use('/api/users', require('./routes/userRoutes')); // User authentication ro
 app.use('/api/files', require('./routes/fileRoutes')); // File management routes
 app.use('/api/app', require('./routes/appRoutes')); // Application-level routes
 
+// Add calendar and widgets routes
+app.use('/api/calendar', require('./routes/calendarRoutes')); // Calendar event routes
+app.use('/api/widgets', require('./routes/widgetsRoutes')); // Widgets management routes
+
 // Root route - simple message to indicate the API is running
 app.get('/', (req, res) => {
   res.send('API is running...');
