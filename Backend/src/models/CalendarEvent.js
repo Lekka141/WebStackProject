@@ -36,4 +36,4 @@ const calendarEventSchema = new mongoose.Schema({
 
 const CalendarEvent = mongoose.model('CalendarEvent', calendarEventSchema);
 
-export default CalendarEvent;
+module.exports = CalendarEvent;

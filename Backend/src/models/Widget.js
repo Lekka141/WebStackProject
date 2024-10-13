@@ -1,23 +1,24 @@
-const { useDispatch } = require('react-redux'); // Keep if you're using Redux
-
 const WidgetLogic = (widget) => {
   let editing = false;
   let title = widget.title;
   let content = widget.content;
-
-  const dispatch = useDispatch(); // Keep if you're using Redux
 
   const handleEditClick = () => {
     editing = true;
   };
 
   const handleSaveClick = () => {
-    dispatch(updateWidget(widget.id, { title, content })); // Assuming updateWidget is available
+    // Logic to handle saving the widget's changes
+    // For example, you could make a call to update the widget in the database here
+    // Replace with actual save functionality as needed
+    console.log(`Saving widget ${widget.id} with new title: ${title} and content: ${content}`);
     editing = false;
   };
 
   const handleDeleteClick = () => {
-    dispatch(deleteWidget(widget.id)); // Assuming deleteWidget is available
+    // Logic to handle deleting the widget
+    // For example, you could make a call to delete the widget from the database here
+    console.log(`Deleting widget ${widget.id}`);
   };
 
   // Return an object containing the logic and state
