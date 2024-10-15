@@ -1,50 +1,99 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const config = require('../config');
-const AppError = require('../utils/appError');
 
-exports.register = async (req, res, next) => {
+// Controller to register a user
+const signUpUser = async (req, res) => {
+  const { name, email, password } = req.body;
+
   try {
-    const { username, email, password } = req.body;
-    const user = await User.create({ username, email, password });
-    const token = jwt.sign({ id: user._id }, config.jwtSecret, { expiresIn: config.jwtExpiresIn });
-    res.status(201).json({ user: { id: user._id, username, email }, token });
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create a new user
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    await user.save();
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Set token as an HTTP-only cookie (for security)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
+      maxAge: 3600000, // 1 hour
+    });
+
+    res.status(201).json({
+      message: 'User registered successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
   } catch (error) {
-    next(new AppError('User registration failed', 400));
+    console.error('Registration error:', error); // Log error for debugging
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-exports.login = async (req, res, next) => {
+// Controller to log in a user
+const signInUser = async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
+    // Find the user by email
     const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
-      return next(new AppError('Invalid email or password', 401));
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
-    const token = jwt.sign({ id: user._id }, config.jwtSecret, { expiresIn: config.jwtExpiresIn });
-    res.json({ user: { id: user._id, username: user.username, email }, token });
+
+    // Check the password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Set token as an HTTP-only cookie (for security)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
+      maxAge: 3600000, // 1 hour
+    });
+
+    res.status(200).json({
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
   } catch (error) {
-    next(new AppError('Login failed', 500));
+    console.error('Login error:', error); // Log error for debugging
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-exports.protect = async (req, res, next) => {
-  try {
-    let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1];
-    }
-    if (!token) {
-      return next(new AppError('You are not logged in', 401));
-    }
-    const decoded = jwt.verify(token, config.jwtSecret);
-    const user = await User.findById(decoded.id).select('-password');
-    if (!user) {
-      return next(new AppError('User no longer exists', 401));
-    }
-    req.user = user;
-    next();
-  } catch (error) {
-    next(new AppError('Not authorized', 401));
-  }
+// Controller to log out a user (clearing the JWT token cookie)
+const signOutUser = (req, res) => {
+  res.clearCookie('token').json({ message: 'Sign-out successful' });
 };
+
+module.exports = { signInUser, signUpUser, signOutUser };
