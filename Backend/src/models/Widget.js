@@ -1,50 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addWidget, deleteWidget, updateWidget } from '../actions/widgetActions';
-
-const Widget = ({ widget }) => {
-  const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState(widget.title);
-  const [content, setContent] = useState(widget.content);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setTitle(widget.title);
-    setContent(widget.content);
-  }, [widget]);
+const WidgetLogic = (widget) => {
+  let editing = false;
+  let title = widget.title;
+  let content = widget.content;
 
   const handleEditClick = () => {
-    setEditing(true);
+    editing = true;
   };
 
   const handleSaveClick = () => {
-    dispatch(updateWidget(widget.id, { title, content }));
-    setEditing(false);
+    // Logic to handle saving the widget's changes
+    // For example, you could make a call to update the widget in the database here
+    // Replace with actual save functionality as needed
+    console.log(`Saving widget ${widget.id} with new title: ${title} and content: ${content}`);
+    editing = false;
   };
 
   const handleDeleteClick = () => {
-    dispatch(deleteWidget(widget.id));
+    // Logic to handle deleting the widget
+    // For example, you could make a call to delete the widget from the database here
+    console.log(`Deleting widget ${widget.id}`);
   };
 
-  return (
-    <div className="widget">
-      {editing ? (
-        <div>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} />
-          <button onClick={handleSaveClick}>Save</button>
-        </div>
-      ) : (
-        <div>
-          <h2>{title}</h2>
-          <p>{content}</p>
-          <button onClick={handleEditClick}>Edit</button>
-          <button onClick={handleDeleteClick}>Delete</button>
-        </div>
-      )}
-    </div>
-  );
+  // Return an object containing the logic and state
+  return {
+    editing,
+    title,
+    content,
+    handleEditClick,
+    handleSaveClick,
+    handleDeleteClick,
+  };
 };
 
-export default Widget;
+module.exports = WidgetLogic;
