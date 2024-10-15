@@ -1,0 +1,21 @@
+{
+  "name": "vaultconnect",
+  "version": "1.0.0",
+  "description": "VaultConnect Project",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "concurrently \"npm start --prefix Backend\" \"npm start --prefix Frontend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "concurrently": "^9.0.1",
+    "postcss": "^8.4.47",
+    "react-scripts": "^5.0.1",
+    "svgo": "^3.3.2"
+  },
+  "devDependencies": {},
+  "keywords": []
+}
