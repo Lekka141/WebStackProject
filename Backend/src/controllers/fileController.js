@@ -1,13 +1,39 @@
-const File = require('../models/User');
+const File = require('../models/File'); // Assuming the correct model name
+const multer = require('multer'); // Include multer for file uploads
 
-// Upload a file
+const allowedFileTypes = ['image/jpeg', 'image/png', 'application/pdf']; // Adjust as needed
+const maxSize = 10 * 1024 * 1024; // 10 MB
+
+const upload = multer({
+  storage: diskStorage, // Configure your disk storage here
+  fileFilter: (req, file, cb) => {
+    if (!allowedFileTypes.includes(file.mimetype)) {
+      cb(new Error('Invalid file type'));
+    } else if (file.size > maxSize) {
+      cb(new Error('File too large'));
+    } else {
+      cb(null, true);
+    }
+  },
+  limits: { fileSize: maxSize },
+});
+
+// Upload a file (using multer middleware)
 const uploadFile = async (req, res) => {
-  const { filename, path } = req.body;
-  const file = new File({ filename, path, userId: req.user.id });
-
   try {
-    await file.save();
-    res.status(201).json({ message: 'File uploaded successfully', file });
+    // Upload the file using multer
+    upload.single('file')(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: err.message }); // Handle validation errors
+      }
+
+      // Access uploaded file details from req.file
+      const { filename, path } = req.file;
+      const file = new File({ filename, path, userId: req.user.id });
+
+      await file.save();
+      res.status(201).json({ message: 'File uploaded successfully', file });
+    });
   } catch (error) {
     console.error('Error uploading file:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
