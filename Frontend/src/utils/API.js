@@ -2,8 +2,8 @@ import axios from 'axios';
 
 /** Create an Axios instance */
 const API = axios.create({
-  baseURL: 'https://api.yourbackend.com',  /* Replace with your actual backend URL */
-  timeout: 10000,  /* 10 seconds timeout */
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
+  timeout: 20000,  /* 20 seconds timeout */
 });
 
 /** Add request interceptor for including authorization token */

@@ -51,7 +51,6 @@ function App() {
               <Route path="/news" element={<ProtectedRoute><NewsWidget /></ProtectedRoute>} />
               <Route path="/rss-feed" element={<ProtectedRoute><RSSFeedWidget /></ProtectedRoute>} />
               <Route path="/" element={<Dashboard />} />
-              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>
