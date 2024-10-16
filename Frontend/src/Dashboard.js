@@ -8,9 +8,10 @@ import Header from './components/Header';
 import SideMenu from './components/SideMenu';
 import AppTheme from './shared-theme/AppTheme';
 import GridLayout from 'react-grid-layout'; // Import React Grid Layout
-import CalendarWidget from './components/Widgets/CalendarWidget'; // Only importing CalendarWidget now
-import WidgetSelector from './components/WidgetSelector';
+import CalendarWidget from './components/Widgets/CalendarWidget'; // Import CalendarWidget component
+import WidgetSelector from './components/WidgetSelector'; // Widget selector component for future use
 
+/* Import custom theme components for customizations */
 import {
   chartsCustomizations,
   dataGridCustomizations,
@@ -18,6 +19,7 @@ import {
   treeViewCustomizations,
 } from './theme/customizations';
 
+/* Merge the customizations into one object to be passed to AppTheme */
 const xThemeComponents = {
   ...chartsCustomizations,
   ...dataGridCustomizations,
@@ -26,18 +28,22 @@ const xThemeComponents = {
 };
 
 export default function Dashboard(props) {
-  // Define the layout for the React Grid Layout
+  /* Define the layout for the React Grid Layout */
   const layout = [
     { i: 'calendar', x: 0, y: 0, w: 3, h: 2 },
+    /* Future widgets can be added to the layout here */
   ];
 
   return (
     <AppTheme {...props} themeComponents={xThemeComponents}>
+      {/* Ensures proper color schemes and UI defaults */}
       <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex' }}>
+        {/* Side menu for navigation */}
         <SideMenu />
+        {/* Top navigation bar */}
         <AppNavbar />
-        {/* Main content */}
+        {/* Main content area */}
         <Box
           component="main"
           sx={(theme) => ({
@@ -48,6 +54,7 @@ export default function Dashboard(props) {
             overflow: 'auto',
           })}
         >
+          {/* Stack to arrange content elements vertically */}
           <Stack
             spacing={2}
             sx={{
@@ -57,12 +64,15 @@ export default function Dashboard(props) {
               mt: { xs: 8, md: 0 },
             }}
           >
+            {/* Page header */}
             <Header />
-            {/* Use React Grid Layout for the MainGrid */}
+            {/* Use React Grid Layout to manage widget placements */}
             <GridLayout className="layout" layout={layout} cols={9} rowHeight={100} width={1200}>
+              {/* Calendar widget rendered in a specific layout */}
               <div key="calendar">
                 <CalendarWidget />
               </div>
+              {/* Future widgets can be rendered here */}
             </GridLayout>
           </Stack>
         </Box>

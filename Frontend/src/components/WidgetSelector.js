@@ -7,12 +7,14 @@ import CalendarWidget from './Widgets/CalendarWidget';
 import RSSFeedWidget from './Widgets/RSSFeedWidget';
 import ToDoWidget from './Widgets/ToDoWidget';
 
-/**
- * WidgetSelector Component
+/** 
+ * WidgetSelector component allows users to select and display various widgets on the dashboard.
+ * @returns {JSX.Element} - The rendered widget selector with checkboxes and selected widgets
  */
 const WidgetSelector = () => {
-    /**
+    /** 
      * State to manage which widgets are selected
+     * @type {Object} - Keys represent widget names, and values represent whether they are selected
      */
     const [selectedWidgets, setSelectedWidgets] = useState({
         weather: false,
@@ -23,8 +25,9 @@ const WidgetSelector = () => {
         toDo: false,
     });
 
-    /**
+    /** 
      * List of available widgets for dynamic rendering
+     * Each object contains the name, label, and component to render
      */
     const widgetsList = [
         { name: 'weather', label: 'Weather Widget', component: <WeatherWidget /> },
@@ -35,9 +38,9 @@ const WidgetSelector = () => {
         { name: 'toDo', label: 'To-Do Widget', component: <ToDoWidget /> },
     ];
 
-    /**
-     * Function to handle checkbox changes
-     * @param {string} widgetName - The name of the widget to toggle
+    /** 
+     * Function to handle checkbox changes for selecting widgets
+     * @param {string} widgetName - The name of the widget to toggle its selected state
      */
     const handleWidgetChange = (widgetName) => {
         if (!selectedWidgets.hasOwnProperty(widgetName)) {
@@ -50,8 +53,9 @@ const WidgetSelector = () => {
         }));
     };
 
-    /**
-     * Helper function to render checkboxes for each widget
+    /** 
+     * Helper function to render checkboxes for each widget dynamically
+     * @returns {JSX.Element[]} - Array of FormControlLabel components with checkboxes
      */
     const renderCheckboxes = () => {
         return widgetsList.map(({ name, label }) => (
@@ -69,8 +73,9 @@ const WidgetSelector = () => {
         ));
     };
 
-    /**
+    /** 
      * Memoized rendering of selected widgets to optimize performance
+     * Only the selected widgets are rendered in the dashboard
      */
     const renderedWidgets = useMemo(() => {
         return (
