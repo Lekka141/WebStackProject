@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Paper } from '@mui/material';
 
-/** 
+/**
  * MainGrid component responsible for rendering a responsive grid layout with widgets
  * @returns {JSX.Element} - The rendered grid layout containing widgets
  */

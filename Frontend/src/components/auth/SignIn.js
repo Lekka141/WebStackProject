@@ -4,6 +4,9 @@ import { AuthContext } from './AuthContext';
 import API from '../../utils/API'; /* Assuming an API utility for backend interaction */
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * SignIn component handles user login functionality
+ */
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,6 +14,10 @@ function SignIn() {
   const { login } = useContext(AuthContext); /* Use the login function from AuthContext */
   const history = useNavigate();
 
+  /**
+   * Handles the login submission and validation
+   * Calls the backend API to authenticate the user
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,7 +26,7 @@ function SignIn() {
       const response = await API.post('/login', { email, password });
 
       if (response.data.success) {
-        /* Set authentication state and Navigate to the dashboard */
+        /* Set authentication state and navigate to the dashboard */
         login({ id: response.data.user.id, email: response.data.user.email }); /* Use the login method */
         history.push('/dashboard'); /* Navigate to the dashboard */
       } else {

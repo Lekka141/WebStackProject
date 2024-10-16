@@ -22,7 +22,7 @@ function FinancialNewsWidget() {
   const [totalResults, setTotalResults] = useState(0); /* Total results from the API */
 
   /** API key for NewsAPI */
-  const apiKey = 'YOUR_NEWSAPI_KEY';
+  const apiKey = '4fbef8e9a8894846bc6adf42ee1cbc89';
 
   /** Fetch news data from NewsAPI */
   const fetchNews = async (searchKeyword = 'finance', pageNumber = 1) => {
@@ -67,7 +67,7 @@ function FinancialNewsWidget() {
         <Typography variant="h5" gutterBottom>
           Financial News
         </Typography>
-        
+
         {/* Search Input */}
         <TextField
           label="Search Keyword"
@@ -77,7 +77,7 @@ function FinancialNewsWidget() {
           onChange={handleKeywordChange}
           sx={{ marginBottom: 2, width: '100%' }}
         />
-        
+
         {/* Search Button */}
         <Button
           variant="contained"

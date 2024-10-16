@@ -13,12 +13,12 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   /** State for tracking if the user is authenticated */
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   /** State for storing the logged-in user's information */
   const [user, setUser] = useState(null);
 
-  /** 
-   * useEffect hook to check localStorage for any stored authentication status and user information 
+  /**
+   * useEffect hook to check localStorage for any stored authentication status and user information
    * This will persist user authentication across page reloads.
    */
   useEffect(() => {
@@ -32,26 +32,26 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /** 
-   * login function to authenticate the user and store authentication state in localStorage 
+  /**
+   * login function to authenticate the user and store authentication state in localStorage
    * @param {Object} userData - The user's data (typically from API response)
    */
   const login = (userData) => {
     setIsAuthenticated(true);
     setUser(userData);
-    
+
     /** Persist authentication state and user data in localStorage */
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
   /**
-   * logout function to clear authentication state and remove user data from localStorage 
+   * logout function to clear authentication state and remove user data from localStorage
    */
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
-    
+
     /** Remove authentication state and user data from localStorage */
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('user');

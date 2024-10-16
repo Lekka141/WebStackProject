@@ -36,7 +36,7 @@
     "react-grid-layout": "^1.4.4",
     "react-oauth": "^0.0.1",
     "react-router-dom": "^6.26.2",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^5.0.1",
     "resolve-url-loader": "^5.0.0",
     "svgo": "^3.3.2",
     "yup": "^1.4.0",
@@ -58,9 +58,6 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3"

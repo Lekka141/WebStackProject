@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Card, CardContent, Typography, TextField, Button, List, ListItem, ListItemText, IconButton, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+/**
+ * ToDoWidget component for managing a to-do list.
+ * Users can add tasks, mark them as completed, and delete tasks.
+ * @returns {JSX.Element} - Rendered ToDoWidget component.
+ */
 function ToDoWidget() {
   /* State to store the task list */
   const [tasks, setTasks] = useState([]);

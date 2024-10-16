@@ -37,6 +37,7 @@ function CalendarWidget() {
     }
     setOpen(true);
   };
+
   const handleClose = () => setOpen(false);
 
   /* Handle adding or editing an event */
@@ -108,7 +109,6 @@ function CalendarWidget() {
               <MenuItem value="personal">Personal</MenuItem>
               <MenuItem value="appointment">Appointment</MenuItem>
             </TextField>
-            {/* Add date/time pickers here if needed */}
           </DialogContent>
           <DialogActions>
             {selectedEvent && (

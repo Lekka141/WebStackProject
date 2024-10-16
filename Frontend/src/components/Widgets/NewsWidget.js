@@ -1,21 +1,20 @@
-// src/components/widgets/NewsWidget.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { 
-  Card, 
-  CardContent, 
-  Typography, 
-  TextField, 
-  Button, 
-  CircularProgress, 
-  List, 
-  ListItem, 
-  ListItemText 
+import {
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText
 } from '@mui/material';
 
 function NewsWidget() {
   /* Store the user's query */
-  const [query, setQuery] = useState(''); 
+  const [query, setQuery] = useState('');
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -55,8 +54,8 @@ function NewsWidget() {
         <Typography variant="h5" gutterBottom>
           News Widget
         </Typography>
-        
-        /* Input for user to enter search query */
+
+        {/* Input for user to enter search query */}
         <TextField
           label="Search News"
           variant="outlined"
@@ -65,8 +64,8 @@ function NewsWidget() {
           onChange={(e) => setQuery(e.target.value)}
           sx={{ marginBottom: 2, width: '100%' }}
         />
-        
-        /* Button to trigger the search */
+
+        {/* Button to trigger the search */}
         <Button
           variant="contained"
           color="primary"
@@ -84,7 +83,7 @@ function NewsWidget() {
           </Typography>
         )}
 
-        /* Display the news articles */
+        {/* Display the news articles */}
         {!loading && !error && articles.length > 0 && (
           <List>
             {articles.slice(0, 5).map((article, index) => (
