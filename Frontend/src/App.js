@@ -8,7 +8,7 @@ import './index.css';
 /** Lazy load components for better performance */
 const Dashboard = lazy(() => import('./Dashboard'));
 const SignUp = lazy(() => import('./components/auth/Signup'));
-const SignIn = lazy(() => import('./components/auth/Login'));
+const Login = lazy(() => import('./components/auth/Login'));
 const WeatherWidget = lazy(() => import('./components/Widgets/WeatherWidget'));
 const CalendarWidget = lazy(() => import('./components/Widgets/CalendarWidget'));
 const ToDoWidget = lazy(() => import('./components/Widgets/ToDoWidget'));
@@ -43,7 +43,7 @@ function App() {
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin" element={<SignIn />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/weather" element={<ProtectedRoute><WeatherWidget /></ProtectedRoute>} />
               <Route path="/calendar" element={<ProtectedRoute><CalendarWidget /></ProtectedRoute>} />
