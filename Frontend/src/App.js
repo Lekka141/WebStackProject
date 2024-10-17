@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/auth/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import { ErrorBoundary } from 'react-error-boundary';
+import './index.css';
 
 /** Lazy load components for better performance */
 const Dashboard = lazy(() => import('./Dashboard'));
-const SignUp = lazy(() => import('./components/auth/SignUp'));
-const SignIn = lazy(() => import('./components/auth/SignIn'));
+const SignUp = lazy(() => import('./components/auth/Signup'));
+const SignIn = lazy(() => import('./components/auth/Login'));
 const WeatherWidget = lazy(() => import('./components/Widgets/WeatherWidget'));
 const CalendarWidget = lazy(() => import('./components/Widgets/CalendarWidget'));
 const ToDoWidget = lazy(() => import('./components/Widgets/ToDoWidget'));

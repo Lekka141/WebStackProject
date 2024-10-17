@@ -1,6 +1,6 @@
 const express = require('express');
-const CalendarEvent = require('../models/CalendarEvent');
-const authMiddleware = require('../middleware/authMiddleware');
+const CalendarEvent = require('../models/CalendarEventModel');
+const { authMiddleware } = require('../middleware/AuthMiddleware'); // Ensure correct import
 
 const router = express.Router();
 

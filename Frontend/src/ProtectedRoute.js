@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   /* If the user is not authenticated, redirect them to the sign-in page */
-  return <Navigate to="/signin" />;
+  return <Navigate to="/Login" />;
 };
 
 export default ProtectedRoute;

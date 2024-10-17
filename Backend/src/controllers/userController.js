@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/UserModel');
 const bcrypt = require('bcryptjs'); // Include bcrypt for password hashing
 
 // Get user profile

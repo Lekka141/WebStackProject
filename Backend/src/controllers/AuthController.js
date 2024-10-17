@@ -1,9 +1,9 @@
-const User = require('../models/User');
+const User = require('../models/UserModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Controller to register a user
-const signUpUser = async (req, res) => {
+// Controller to sign up a user
+const Signup = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -45,13 +45,13 @@ const signUpUser = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Registration error:', error); // Log error for debugging
+    console.error('Registration error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 // Controller to log in a user
-const signInUser = async (req, res) => {
+const Login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -73,7 +73,7 @@ const signInUser = async (req, res) => {
     // Set token as an HTTP-only cookie (for security)
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 3600000, // 1 hour
     });
 
@@ -86,14 +86,14 @@ const signInUser = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Login error:', error); // Log error for debugging
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 // Controller to log out a user (clearing the JWT token cookie)
-const signOutUser = (req, res) => {
-  res.clearCookie('token').json({ message: 'Sign-out successful' });
+const Logout = (req, res) => {
+  res.clearCookie('token').json({ message: 'Logout successful' });
 };
 
-module.exports = { signInUser, signUpUser, signOutUser };
+module.exports = { Login, Signup, Logout };
