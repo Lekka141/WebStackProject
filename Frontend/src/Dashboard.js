@@ -24,22 +24,26 @@ const LoadingSpinner = () => (
 
 /** Error Fallback Component for handling widget loading errors */
 const ErrorFallback = ({ error, resetErrorBoundary }) => (
-  <div role="alert">
+  <Box role="alert" p={2} bgcolor="#fdecea" borderRadius={4}>
     <Typography variant="h6" color="error">Something went wrong!</Typography>
-    <pre>{error.message}</pre>
-    <Button variant="contained" color="primary" onClick={resetErrorBoundary}>Try again</Button>
-  </div>
+    <Typography variant="body2" color="textSecondary">{error.message}</Typography>
+    <Button variant="contained" color="primary" onClick={resetErrorBoundary} sx={{ mt: 2 }}>Try again</Button>
+  </Box>
 );
 
 function Dashboard() {
   /** State to manage active widgets */
-  const [activeWidgets, setActiveWidgets] = useState(['WeatherWidget', 'CalendarWidget', 'ToDoWidget']);
+  const [activeWidgets, setActiveWidgets] = useState({
+    WeatherWidget: true,
+    CalendarWidget: true,
+    ToDoWidget: true,
+    FinancialNewsWidget: false,
+    RSSFeedWidget: false,
+    NewsWidget: false,
+  });
   const [data, setData] = useState(null); /** State to hold fetched data */
 
-  /**
-   * Fetch data when the component mounts.
-   * Uses the 'get' method from API utility to fetch data from the given endpoint.
-   */
+  /** Fetch data when the component mounts. */
   useEffect(() => {
     get('/data-endpoint')
       .then(response => {
@@ -50,38 +54,32 @@ function Dashboard() {
       });
   }, []);
 
-  /**
-   * Function to toggle the visibility of widgets on the dashboard.
-   * Updates the activeWidgets state to add or remove the specified widget.
-   */
-  const toggleWidget = (widget) => {
-    setActiveWidgets(prevWidgets =>
-      prevWidgets.includes(widget) ? prevWidgets.filter(w => w !== widget) : [...prevWidgets, widget]
-    );
+  /** Function to toggle the visibility of widgets on the dashboard */
+  const toggleWidget = (widgetName) => {
+    setActiveWidgets(prevWidgets => ({
+      ...prevWidgets,
+      [widgetName]: !prevWidgets[widgetName],
+    }));
   };
 
   return (
-    <Box>
-      <Header /> {/* Render the app header */}
-      <SideMenu toggleWidget={toggleWidget} /> {/* Sidebar with widget selection to toggle widgets */}
-      <MainGrid> {/* Main content area where widgets are displayed */}
-        {
-          /**
-           * Wrap widgets in ErrorBoundary to catch any runtime errors specific to each widget.
-           * Suspense is used to display a loading spinner while each widget is being loaded.
-           */
-        }
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<LoadingSpinner />}>
-            {activeWidgets.includes('WeatherWidget') && <WeatherWidget data={data?.weather} />}
-            {activeWidgets.includes('CalendarWidget') && <CalendarWidget data={data?.calendar} />}
-            {activeWidgets.includes('ToDoWidget') && <ToDoWidget data={data?.todos} />}
-            {activeWidgets.includes('FinancialNewsWidget') && <FinancialNewsWidget />}
-            {activeWidgets.includes('RSSFeedWidget') && <RSSFeedWidget />}
-            {activeWidgets.includes('NewsWidget') && <NewsWidget />}
-          </Suspense>
-        </ErrorBoundary>
-      </MainGrid>
+    <Box display="flex">
+      <SideMenu selectedWidgets={activeWidgets} setSelectedWidgets={setActiveWidgets} /> {/* Sidebar with widget selection to toggle widgets */}
+      <Box flex="1" ml={3}>
+        <Header /> {/* Render the app header */}
+        <MainGrid> {/* Main content area where widgets are displayed */}
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<LoadingSpinner />}>
+              {activeWidgets.WeatherWidget && <WeatherWidget data={data?.weather} />}
+              {activeWidgets.CalendarWidget && <CalendarWidget data={data?.calendar} />}
+              {activeWidgets.ToDoWidget && <ToDoWidget data={data?.todos} />}
+              {activeWidgets.FinancialNewsWidget && <FinancialNewsWidget />}
+              {activeWidgets.RSSFeedWidget && <RSSFeedWidget />}
+              {activeWidgets.NewsWidget && <NewsWidget />}
+            </Suspense>
+          </ErrorBoundary>
+        </MainGrid>
+      </Box>
     </Box>
   );
 }
