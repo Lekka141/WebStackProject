@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/auth/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import { ErrorBoundary } from 'react-error-boundary';
-import './App.css'; // Main stylesheet for global styles
 
 /**
  * Lazy load components for better performance, reducing initial bundle size.
