@@ -8,26 +8,42 @@ import DeleteIcon from '@mui/icons-material/Delete';
  * @returns {JSX.Element} - Rendered ToDoWidget component.
  */
 function ToDoWidget() {
-  /* State to store the task list */
+  /**
+   * State to store the list of tasks.
+   * Each task object has the properties 'text' and 'completed'.
+   */
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
-  /* Handle adding a new task */
+  /**
+   * Handle adding a new task to the list.
+   * Checks if the new task is not empty before adding it.
+   */
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
       setTasks([...tasks, { text: newTask, completed: false }]);
-      setNewTask('');
+      setNewTask(''); /** Clear the input field after adding the task */
     }
   };
 
-  /* Handle toggling task completion */
+  /**
+   * Handle toggling the completion status of a task.
+   * Updates the 'completed' property of the specified task.
+   *
+   * @param {number} index - The index of the task to be toggled.
+   */
   const handleToggleTask = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks[index].completed = !updatedTasks[index].completed;
     setTasks(updatedTasks);
   };
 
-  /* Handle deleting a task */
+  /**
+   * Handle deleting a task from the list.
+   * Removes the task at the specified index.
+   *
+   * @param {number} index - The index of the task to be deleted.
+   */
   const handleDeleteTask = (index) => {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);

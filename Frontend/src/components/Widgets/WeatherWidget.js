@@ -4,13 +4,15 @@ import { Card, CardContent, Typography, TextField, Button, CircularProgress, Gri
 
 /**
  * WeatherWidget component that fetches and displays weather information for a given city.
+ * Allows users to input a city name and retrieve its current weather information.
+ * @returns {JSX.Element} - Rendered WeatherWidget component.
  */
 function WeatherWidget() {
   /** State variables to manage city, weather data, loading status, and error handling */
-  const [city, setCity] = useState('Johannesburg');  // Default city set to Johannesburg
-  const [weatherData, setWeatherData] = useState(null);  // Holds the weather data
-  const [loading, setLoading] = useState(false);  // Tracks if the API request is in progress
-  const [error, setError] = useState(null);  // Holds any error message
+  const [city, setCity] = useState('Johannesburg');  /** Default city set to Johannesburg */
+  const [weatherData, setWeatherData] = useState(null);  /** Holds the weather data */
+  const [loading, setLoading] = useState(false);  /** Tracks if the API request is in progress */
+  const [error, setError] = useState(null);  /** Holds any error message */
 
   /** OpenWeatherMap API Key */
   const apiKey = 'c2201704c24e9a5fbf114d5629d66e10';
@@ -20,22 +22,20 @@ function WeatherWidget() {
    * @param {string} city - The name of the city for which to fetch weather data.
    */
   const fetchWeatherData = async (city) => {
-    setLoading(true);  // Set loading to true when making the API request
-    setError(null);  // Clear previous errors
+    setLoading(true);  /** Set loading to true when making the API request */
+    setError(null);  /** Clear previous errors */
     try {
       const response = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
       );
-      setWeatherData(response.data);  // Store fetched data in weatherData state
+      setWeatherData(response.data);  /** Store fetched data in weatherData state */
     } catch (err) {
-      setError('Failed to fetch weather data. Please try again.');  // Set error if the API request fails
+      setError('Failed to fetch weather data. Please try again.');  /** Set error if the API request fails */
     }
-    setLoading(false);  // Stop loading after the API request completes
+    setLoading(false);  /** Stop loading after the API request completes */
   };
 
-  /**
-   * Fetch the default weather data for the default city on component mount.
-   */
+  /** Fetch the default weather data for the default city on component mount */
   useEffect(() => {
     fetchWeatherData(city);
   }, []);
@@ -45,15 +45,13 @@ function WeatherWidget() {
    * @param {object} event - The input change event.
    */
   const handleCityChange = (event) => {
-    setCity(event.target.value);  // Update the city state based on user input
+    setCity(event.target.value);  /** Update the city state based on user input */
   };
 
-  /**
-   * Trigger a new weather data fetch for the entered city.
-   */
+  /** Trigger a new weather data fetch for the entered city */
   const handleSearch = () => {
     if (city) {
-      fetchWeatherData(city);  // Fetch weather data for the current city
+      fetchWeatherData(city);  /** Fetch weather data for the current city */
     }
   };
 

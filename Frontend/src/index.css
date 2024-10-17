@@ -121,6 +121,9 @@ input:focus, textarea:focus, select:focus {
   background-color: #2E86C1; /* Calm soft blue */
   padding: 15px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .navbar a {
@@ -135,6 +138,12 @@ input:focus, textarea:focus, select:focus {
 .navbar a:hover {
   background-color: #21618C; /* Slightly darker on hover */
   border-radius: 5px;
+}
+
+/* Logo in the navbar */
+.navbar-logo {
+  height: 40px;
+  margin-right: 20px;
 }
 
 /* Footer */
@@ -259,4 +268,24 @@ input[type="submit"]:hover, button[type="submit"]:hover {
   h2 {
     font-size: 1.8rem;
   }
+}
+
+/* Logo Implementation */
+/* Adding the logo to the navbar */
+.navbar img {
+  content: url('/VaultConnect/Images/Logo.png');
+  height: 40px; /* Adjust height as needed */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Position the logo to the left side of the navigation bar */
+.navbar .logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo-container img {
+  height: 50px;
+  margin-right: 10px;
 }

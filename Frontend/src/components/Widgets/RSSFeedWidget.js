@@ -1,66 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import {
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Button,
-  CircularProgress,
-  Grid,
-} from '@mui/material';
+import { Card, CardContent, Typography, TextField, Button, CircularProgress, Grid } from '@mui/material';
 
-/* Define the RSSFeedWidget component */
+/**
+ * RSSFeedWidget component that fetches and displays RSS feed items from a given URL.
+ * Allows users to input an RSS feed URL and retrieve its latest articles.
+ * @returns {JSX.Element} - Rendered RSSFeedWidget component.
+ */
 function RSSFeedWidget() {
-  /* State to manage the RSS feed URL */
-  const [rssUrl, setRssUrl] = useState('');
-  /* State to store the RSS feed data */
-  const [feedData, setFeedData] = useState([]);
-  /* State to manage the loading status */
-  const [loading, setLoading] = useState(false);
-  /* State to handle any errors during data fetch */
-  const [error, setError] = useState(null);
+  /** State variables to manage RSS feed URL, feed data, loading status, and error handling */
+  const [rssUrl, setRssUrl] = useState('');  /** The RSS feed URL entered by the user */
+  const [feedData, setFeedData] = useState([]);  /** Holds the list of RSS feed items */
+  const [loading, setLoading] = useState(false);  /** Tracks if the API request is in progress */
+  const [error, setError] = useState(null);  /** Holds any error message */
 
-  /* Function to fetch RSS feed data */
-  const fetchRSSFeed = async () => {
-    /* Set loading to true before fetching data */
-    setLoading(true);
-    setError(null);
-
+  /**
+   * Fetch RSS feed data from rss2json API for the specified URL.
+   * @param {string} rssUrl - The URL of the RSS feed to fetch.
+   */
+  const fetchRSSFeed = async (rssUrl) => {
+    setLoading(true);  /** Set loading to true when making the API request */
+    setError(null);  /** Clear previous errors */
     try {
-      /* Use axios to fetch the RSS feed data */
       const response = await axios.get(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
-      /* Update feedData with the fetched data */
-      setFeedData(response.data.items);
+      setFeedData(response.data.items);  /** Store fetched RSS feed items in feedData state */
     } catch (err) {
-      /* Handle any errors that occur during the fetch */
-      setError('Failed to fetch RSS feed. Please check the URL.');
+      setError('Failed to fetch RSS feed. Please check the URL.');  /** Set error if the API request fails */
     }
-    /* Set loading to false after fetching data */
-    setLoading(false);
+    setLoading(false);  /** Stop loading after the API request completes */
   };
 
-  /* Handle the input change for the RSS URL */
+  /**
+   * Handle changes in the RSS feed URL input field and update the state.
+   * @param {object} event - The input change event.
+   */
   const handleUrlChange = (event) => {
-    setRssUrl(event.target.value);
+    setRssUrl(event.target.value);  /** Update the RSS feed URL state based on user input */
   };
 
-  /* Function to handle the fetch operation on button click */
+  /** Trigger a new RSS feed data fetch for the entered URL */
   const handleFetch = () => {
-    /* Only fetch if a URL is provided */
     if (rssUrl) {
-      fetchRSSFeed();
+      fetchRSSFeed(rssUrl);  /** Fetch RSS feed data for the current URL */
     }
   };
 
-  /* Render the component */
   return (
     <Card sx={{ maxWidth: 400, margin: 'auto' }}>
       <CardContent>
         <Typography variant="h5" gutterBottom>
           RSS Feed Widget
         </Typography>
-        {/* Input field for the RSS feed URL */}
+
+        {/* Input field for the user to enter an RSS feed URL */}
         <TextField
           label="Enter RSS Feed URL"
           variant="outlined"
@@ -69,7 +61,8 @@ function RSSFeedWidget() {
           onChange={handleUrlChange}
           sx={{ marginBottom: 2, width: '100%' }}
         />
-        {/* Button to fetch the RSS feed */}
+
+        {/* Button to fetch the RSS feed for the specified URL */}
         <Button
           variant="contained"
           color="primary"
@@ -80,8 +73,9 @@ function RSSFeedWidget() {
           Get RSS Feed
         </Button>
 
-        {/* Display loading spinner while fetching data */}
+        {/* Display loading spinner if the request is in progress */}
         {loading && <CircularProgress sx={{ marginTop: 2 }} />}
+
         {/* Display error message if any error occurs */}
         {error && (
           <Typography color="error" sx={{ marginTop: 2 }}>
@@ -89,7 +83,7 @@ function RSSFeedWidget() {
           </Typography>
         )}
 
-        {/* Display fetched RSS feed data */}
+        {/* Display the fetched RSS feed data */}
         {feedData.length > 0 && (
           <Grid container spacing={2} sx={{ marginTop: 2 }}>
             {feedData.map((item, index) => (
@@ -106,5 +100,4 @@ function RSSFeedWidget() {
   );
 }
 
-/* Export the RSSFeedWidget component */
 export default RSSFeedWidget;

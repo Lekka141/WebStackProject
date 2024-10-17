@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './AuthContext';
 import API from '../../utils/API'; /* Assuming an API utility for backend interaction */
+import { useNavigate } from 'react-router-dom';
 
 /**
- * SignUp component handles user registration functionality.
- * It provides input fields for the user to enter their name, email, and password, and submits these details
- * to register the user through an API request. On successful registration, the user is redirected to the sign-in page.
+ * SignIn component handles user login functionality.
+ * It provides input fields for the user to enter their email and password, and submits these credentials
+ * to authenticate the user through an API request. On successful login, the user is navigated to the dashboard.
  */
-function SignUp() {
+function SignIn() {
   /** State variables for storing user input */
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [error, setError] = useState('');
   
-  /** Hook to navigate the user to different routes */
+  /** Access the login function from the AuthContext */
+  const { login } = useContext(AuthContext);
   const history = useNavigate();
 
   /**
-   * Handles the registration form submission.
-   * Calls the backend API to register the user, and navigates to the sign-in page on success.
+   * Handles the login form submission.
+   * Calls the backend API to authenticate the user, and updates the authentication state on success.
    *
    * @param {Object} e - The event object representing the form submission.
    */
@@ -28,14 +29,18 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      /** Call the backend API for sign up with the user's name, email, and password */
-      const response = await API.post('/signup', { name, email, password });
+      /** Call the backend API for login with the user's email and password */
+      const response = await API.post('/login', { email, password });
 
       if (response.data.success) {
-        /** Navigate to the sign-in page upon successful registration */
-        history('/signin');
+        /**
+         * If login is successful, update the authentication state using the login method
+         * from the AuthContext, and navigate the user to the dashboard page.
+         */
+        login({ id: response.data.user.id, email: response.data.user.email });
+        history('/dashboard');
       } else {
-        /** Set an error message if registration was not successful */
+        /** Set an error message if login was not successful */
         setError(response.data.message);
       }
     } catch (err) {
@@ -55,23 +60,9 @@ function SignUp() {
         }}
       >
         <Typography component="h1" variant="h5">
-          Sign Up
+          Sign In
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          {/** Full name input field */}
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Full Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
           {/** Email input field */}
           <TextField
             variant="outlined"
@@ -82,6 +73,7 @@ function SignUp() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -99,13 +91,13 @@ function SignUp() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/** Display error message if registration fails */}
+          {/** Display error message if login fails */}
           {error && (
             <Typography color="error" variant="body2">
               {error}
             </Typography>
           )}
-          {/** Submit button for registration */}
+          {/** Submit button for login */}
           <Button
             type="submit"
             fullWidth
@@ -113,7 +105,7 @@ function SignUp() {
             color="primary"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            Sign In
           </Button>
         </Box>
       </Box>
@@ -121,4 +113,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignIn;

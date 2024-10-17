@@ -22,7 +22,7 @@ const LoadingSpinner = () => (
   </Box>
 );
 
-/** Error Fallback Component */
+/** Error Fallback Component for handling widget loading errors */
 const ErrorFallback = ({ error, resetErrorBoundary }) => (
   <div role="alert">
     <Typography variant="h6" color="error">Something went wrong!</Typography>
@@ -32,12 +32,16 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => (
 );
 
 function Dashboard() {
+  /** State to manage active widgets */
   const [activeWidgets, setActiveWidgets] = useState(['WeatherWidget', 'CalendarWidget', 'ToDoWidget']);
-  const [data, setData] = useState(null); /* State to hold fetched data */
+  const [data, setData] = useState(null); /** State to hold fetched data */
 
-  /** Fetch data on mount */
+  /**
+   * Fetch data when the component mounts.
+   * Uses the 'get' method from API utility to fetch data from the given endpoint.
+   */
   useEffect(() => {
-    get('/data-endpoint') /* Use the get method from API */
+    get('/data-endpoint')
       .then(response => {
         setData(response);
       })
@@ -46,7 +50,10 @@ function Dashboard() {
       });
   }, []);
 
-  /** Function to toggle widget visibility */
+  /**
+   * Function to toggle the visibility of widgets on the dashboard.
+   * Updates the activeWidgets state to add or remove the specified widget.
+   */
   const toggleWidget = (widget) => {
     setActiveWidgets(prevWidgets =>
       prevWidgets.includes(widget) ? prevWidgets.filter(w => w !== widget) : [...prevWidgets, widget]
@@ -55,9 +62,15 @@ function Dashboard() {
 
   return (
     <Box>
-      <Header /> {/* App header */}
-      <SideMenu toggleWidget={toggleWidget} /> {/* Sidebar with widget selection */}
-      <MainGrid>
+      <Header /> {/* Render the app header */}
+      <SideMenu toggleWidget={toggleWidget} /> {/* Sidebar with widget selection to toggle widgets */}
+      <MainGrid> {/* Main content area where widgets are displayed */}
+        {
+          /**
+           * Wrap widgets in ErrorBoundary to catch any runtime errors specific to each widget.
+           * Suspense is used to display a loading spinner while each widget is being loaded.
+           */
+        }
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Suspense fallback={<LoadingSpinner />}>
             {activeWidgets.includes('WeatherWidget') && <WeatherWidget data={data?.weather} />}
